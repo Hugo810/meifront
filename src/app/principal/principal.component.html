@@ -1,0 +1,53 @@
+<form>
+    <img src="assets/cliente.png" alt="Imagem de Cliente">
+    <input type="number" placeholder="Código" class="form-control"name = "codigo"[(ngModel)]="cliente.codigo">
+    <input type="text" placeholder="Nome" class="form-control"name = "nome"[(ngModel)]="cliente.nome">
+    <input type="text" placeholder="Sexo" class="form-control"name = "sexo"[(ngModel)]="cliente.sexo">
+    <input type="text" placeholder="CPF" class="form-control"name = "cpf"[(ngModel)]="cliente.cpf">
+    <input type="text" placeholder="CNPJ" class="form-control"name = "cnpj"[(ngModel)]="cliente.cnpj">
+    <input type="text" placeholder="Telefone Residencial" class="form-control"name = "telefoneResidencial"[(ngModel)]="cliente.telefoneResidencial">
+    <input type="text" placeholder="Telefone Comercial" class="form-control"name = "telefoneComercial"[(ngModel)]="cliente.telefoneComercial">
+    <input type="text" placeholder="Telefone Celular" class="form-control"name = "telefoneCelular"[(ngModel)]="cliente.telefoneCelular">
+    <input type="text" placeholder="Email" class="form-control"name="email"[(ngModel)]="cliente.email">
+  
+    <input type="button" value="Cadastrar" *ngIf="btnCadastro" class="btn btn-primary"(click)="cadastrar()">
+    <input type="button" value="Alterar" *ngIf="!btnCadastro" class="btn btn-warning">
+    <input type="button" value="Remover" *ngIf="!btnCadastro" class="btn btn-danger">
+    <input type="button" value="Cancelar" *ngIf="!btnCadastro" class="btn btn-secondary">
+
+    
+  
+    <table class="table" *ngIf="tabela" >
+        <thead class="thead-dark">
+            <tr>
+                <th>Código</th>
+                <th>Nome</th>
+                <th>Sexo</th>
+                <th>CPF</th>
+                <th>CNPJ</th>
+                <th>Telefone Residencial</th>
+                <th>Telef. Comercial</th>
+                <th>Telef. Celular</th>
+                <th>Email</th>
+                <th>Selecionar</th>
+            </tr>
+        </thead>
+    
+        <tbody>
+            <tr *ngFor="let cliente of clientes; index as i">
+                <td>{{i+1}}</td>
+                <td>{{cliente.nome}}</td>
+                <td>{{cliente.sexo}}</td>
+                <td>{{cliente.cpf}}</td>
+                <td>{{cliente.cnpj}}</td>
+                <td>{{cliente.telefoneResidencial}}</td>
+                <td>{{cliente.telefoneComercial}}</td>
+                <td>{{cliente.telefoneCelular}}</td>
+                <td>{{cliente.email}}</td>
+                <td>
+                    <button (click)="selecionar" class="btn btn-sucesss"(click)="selecionarCliente(i)">Selecionar</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
