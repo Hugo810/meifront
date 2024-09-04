@@ -1,3 +1,4 @@
+import { Endereco } from "./Endereco";
 export class Cliente{
     
     codigo:number=0;
@@ -9,6 +10,7 @@ export class Cliente{
     telefoneComercial:string='';
     telefoneCelular:string='';
     email:string='';
+    endereco: Endereco = new Endereco();
 
 
 
