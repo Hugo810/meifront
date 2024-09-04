@@ -112,13 +112,48 @@
           </div>
         </div>
 
+        <!-- Endereço Inputs -->
+        <div class="form-row">
+          <div class="form-col">
+            <label for="logradouro">Logradouro</label>
+            <input type="text" id="logradouro" class="form-control" name="logradouro" [(ngModel)]="cliente.endereco.logradouro">
+          </div>
+          <div class="form-col">
+            <label for="numero">Número</label>
+            <input type="text" id="numero" class="form-control" name="numero" [(ngModel)]="cliente.endereco.numero">
+          </div>
+          <div class="form-col">
+            <label for="bairro">Bairro</label>
+            <input type="text" id="bairro" class="form-control" name="bairro" [(ngModel)]="cliente.endereco.bairro">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-col">
+            <label for="cidade">Cidade</label>
+            <input type="text" id="cidade" class="form-control" name="cidade" [(ngModel)]="cliente.endereco.cidade">
+          </div>
+          <div class="form-col">
+            <label for="estado">Estado</label>
+            <input type="text" id="estado" class="form-control" name="estado" [(ngModel)]="cliente.endereco.uf">
+          </div>
+          <div class="form-col">
+            <label for="cep">CEP</label>
+            <input type="text" id="cep" class="form-control" name="cep" [(ngModel)]="cliente.endereco.cep">
+          </div>
+          <div class="form-col">
+            <label for="cep">Complemento</label>
+            <input type="text" id="complemento" class="form-control" name="complemento" [(ngModel)]="cliente.endereco.complemento">
+          </div>
+        </div>
+
         <!-- Buttons -->
         <div class="form-row">
           <div class="form-col text-center">
             <input type="button" value="Cadastrar" *ngIf="btnCadastro" class="btn btn-primary" (click)="cadastrar()">
             <input type="button" value="Alterar" *ngIf="!btnCadastro" class="btn btn-warning" (click)="editar()">
-            <input type="button" value="Remover" *ngIf="!btnCadastro" class="btn btn-danger"(click)="remover()">
-            <input type="button" value="Cancelar" *ngIf="!btnCadastro" class="btn btn-secondary"(click)="cancelar()">
+            <input type="button" value="Remover" *ngIf="!btnCadastro" class="btn btn-danger" (click)="remover()">
+            <input type="button" value="Cancelar" *ngIf="!btnCadastro" class="btn btn-secondary" (click)="cancelar()">
           </div>
         </div>
       </form>
@@ -155,12 +190,32 @@
           <label>Email:</label> {{cliente.email}}
         </div>
         <div class="cliente-col">
+          <label>Logradouro:</label> {{cliente.endereco.logradouro}}
+        </div>
+        <div class="cliente-col">
+          <label>Número:</label> {{cliente.endereco.numero}}
+        </div>
+        <div class="cliente-col">
+          <label>Bairro:</label> {{cliente.endereco.bairro}}
+        </div>
+        <div class="cliente-col">
+          <label>Cidade:</label> {{cliente.endereco.cidade}}
+        </div>
+        <div class="cliente-col">
+          <label>Estado:</label> {{cliente.endereco.uf}}
+        </div>
+        <div class="cliente-col">
+          <label>CEP:</label> {{cliente.endereco.cep}}
+        </div>
+        <div class="cliente-col">
+            <label>Complemento:</label> {{cliente.endereco.complemento}}
+          </div>
+        <div class="cliente-col">
           <button (click)="selecionarCliente(cliente)" class="btn btn-success">Selecionar</button>
         </div>
       </div>
     </div>
   </div>
-
   <!-- Inclua o Bootstrap JS e dependências -->
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>

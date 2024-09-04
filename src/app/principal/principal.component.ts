@@ -9,7 +9,7 @@ import { Endereco } from '../modelo/Endereco';
   styleUrls: ['./principal.component.css']
 })
 export class PrincipalComponent implements OnInit {
-  cliente: Cliente = new Cliente(); // Inicializando corretamente
+  cliente: Cliente = new Cliente(); // Inicializando o cliente com endereço
   btnCadastro: boolean = true;
   tabela: boolean = true;
   clientes: Cliente[] = [];
@@ -32,7 +32,7 @@ export class PrincipalComponent implements OnInit {
     this.servico.cadastrar(this.cliente)
       .subscribe(retorno => {
         this.clientes.push(retorno);
-        this.cliente = new Cliente(); // Limpa o formulário
+        this.cliente = new Cliente(); // Limpa o formulário, incluindo o endereço
         alert('Cliente cadastrado com sucesso');
       }, error => {
         console.error('Erro ao cadastrar cliente:', error);
@@ -41,7 +41,7 @@ export class PrincipalComponent implements OnInit {
   }
 
   selecionarCliente(cliente: Cliente): void {
-    this.cliente = { ...cliente }; // Preenche o formulário com os dados do cliente
+    this.cliente = { ...cliente }; // Preenche o formulário com os dados do cliente e endereço
     this.btnCadastro = false; // Muda o estado para edição
     this.tabela = false; // Oculta a tabela
   }
@@ -75,7 +75,7 @@ export class PrincipalComponent implements OnInit {
         .subscribe(retorno => {
           let posicao = this.clientes.findIndex(obj => obj.codigo === this.cliente.codigo);
           if (posicao !== -1) {
-            this.clientes.splice(posicao,1);
+            this.clientes.splice(posicao, 1);
             this.cliente = new Cliente(); // Limpa o formulário
             this.btnCadastro = true; // Volta ao estado de cadastro
             this.tabela = true; // Mostra a tabela novamente
@@ -92,11 +92,9 @@ export class PrincipalComponent implements OnInit {
     }
   }
 
-  cancelar():void{
-    this.cliente = new Cliente(); // Limpa o formulário
+  cancelar(): void {
+    this.cliente = new Cliente(); // Limpa o formulário, incluindo o endereço
     this.btnCadastro = true; // Volta ao estado de cadastro
     this.tabela = true;
   }
-
-
 }
