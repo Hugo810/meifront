@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulário e Tabela</title>
+    <!-- Inclua o Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .form-container {
+            margin-top: 30px;
+        }
+
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+        }
+
+        .form-col {
+            flex: 1 1 33%;
+            /* Ocupa 33% da largura por coluna */
+            padding: 5px;
+            box-sizing: border-box;
+        }
+
+        .form-col label {
+            font-weight: bold;
+            display: block;
+        }
+
+        .table-container {
+            margin-top: 30px;
+        }
+
+        .fornecedor-row {
+            display: flex;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #007bff;
+            border-radius: 5px;
+        }
+
+        .fornecedor-col {
+            flex: 1 1 33%;
+            /* Ocupa 33% da largura por coluna */
+            padding: 5px;
+            box-sizing: border-box;
+        }
+
+        .fornecedor-col label {
+            font-weight: bold;
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container mt-5">
+        <!-- Formulário de Coleta -->
+        <div class="form-container">
+            <form>
+                <div class="form-row">
+                    <div class="form-col text-center">
+                        <img src="assets/fornecedor.png" alt="Imagem de Fornecedor" class="img-fluid mb-3"
+                            style="max-width: 200px; height: auto;">
+
+                    </div>
+                </div>
+
+                <!-- Form Inputs -->
+                <div class="form-row">
+                    <div class="form-col">
+                        <label for="codigo">Código</label>
+                        <input type="number" id="codigo" class="form-control" name="codigo"
+                            [(ngModel)]="fornecedor.codigo">
+                    </div>
+                    <div class="form-col">
+                        <label for="nomeContato">Razão social</label>
+                        <input type="text" id="nomeContato" class="form-control" name="nomeContato"
+                            [(ngModel)]="fornecedor.razaoSocial">
+                    </div>
+                    <div class="form-col">
+                        <label for="cnpj">Cnpj</label>
+                        <input type="text" id="cnpj" class="form-control" name="cnpj" [(ngModel)]="fornecedor.cnpj">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-col">
+                        <label for="nomeContato">Contato</label>
+                        <input type="text" id="nomeContato" class="form-control" name="nomeContato"
+                            [(ngModel)]="fornecedor.nomeContato">
+                    </div>
+
+                    <div class="form-col">
+                        <label for="telefone1">Telefone 1</label>
+                        <input type="text" id="telefone1" class="form-control" name="telefone1"
+                            [(ngModel)]="fornecedor.telefone1">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-col">
+                        <label for="email">Email</label>
+                        <input type="text" id="email" class="form-control" name="email" [(ngModel)]="fornecedor.email">
+                    </div>
+                    <div class="form-col">
+                        <label for="telefone2">Telefone 2</label>
+                        <input type="text" id="telefone2" class="form-control" name="telefone2"
+                            [(ngModel)]="fornecedor.telefone2">
+                    </div>
+                </div>
+
+                <!-- Fornecedor Inputs -->
+                <div class="form-row">
+                    <div class="form-col">
+                        <label for="logradouro">Logradouro</label>
+                        <input type="text" id="logradouro" class="form-control" name="logradouro"
+                            [(ngModel)]="fornecedor.endereco.logradouro">
+                    </div>
+                    <div class="form-col">
+                        <label for="numero">Número</label>
+                        <input type="text" id="numero" class="form-control" name="numero"
+                            [(ngModel)]="fornecedor.endereco.numero">
+                    </div>
+                    <div class="form-col">
+                        <label for="bairro">Bairro</label>
+                        <input type="text" id="bairro" class="form-control" name="bairro"
+                            [(ngModel)]="fornecedor.endereco.bairro">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-col">
+                        <label for="cidade">Cidade</label>
+                        <input type="text" id="cidade" class="form-control" name="cidade"
+                            [(ngModel)]="fornecedor.endereco.cidade">
+                    </div>
+                    <div class="form-col">
+                        <label for="estado">Estado</label>
+                        <input type="text" id="estado" class="form-control" name="estado"
+                            [(ngModel)]="fornecedor.endereco.uf">
+                    </div>
+                    <div class="form-col">
+                        <label for="cep">CEP</label>
+                        <input type="text" id="cep" class="form-control" name="cep"
+                            [(ngModel)]="fornecedor.endereco.cep">
+                    </div>
+                </div>
+
+                <!-- Buttons -->
+                <div class="form-row">
+                    <div class="form-col text-center">
+                        <input type="button" value="Cadastrar" *ngIf="btnCadastro" class="btn btn-primary"
+                            (click)="cadastrar()">
+                        <input type="button" value="Alterar" *ngIf="!btnCadastro" class="btn btn-warning"
+                            (click)="editar()">
+                        <input type="button" value="Remover" *ngIf="!btnCadastro" class="btn btn-danger"
+                            (click)="remover()">
+                        <input type="button" value="Cancelar" *ngIf="!btnCadastro" class="btn btn-secondary"
+                            (click)="cancelar()">
+                        <br><br>
+                        <div class="col-12 text-center">
+                            <button (click)="retornar()" class="btn btn-success">Voltar</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- Dados dos fornecedors -->
+        <div class="table-container" *ngIf="fornecedores.length > 0">
+            <div *ngFor="let fornecedor of fornecedores" class="fornecedor-row">
+                <div class="fornecedor-col">
+                    <label>Código:</label> {{fornecedor.codigo}}
+                </div>
+                <div class="fornecedor-col">
+                    <label>razaoSocial:</label> {{fornecedor.razaoSocial}}
+                </div>
+                <div class="fornecedor-col">
+                    <label>Cnpj:</label> {{fornecedor.cnpj}}
+                </div>
+                <div class="fornecedor-col">
+                    <label>Contato:</label> {{fornecedor.nomeContato}}
+                </div>
+                <div class="fornecedor-col">
+                    <label>Telefone 1:</label> {{fornecedor.telefone1}}
+                </div>
+                <div class="fornecedor-col">
+                    <label>Email:</label> {{fornecedor.email}}
+                </div>
+                <div class="fornecedor-col">
+                    <label>Telefone 2:</label> {{fornecedor.telefone2}}
+                </div>
+
+
+                <div class="fornecedor-col">
+                    <label>Número:</label> {{fornecedor.endereco.numero}}
+                </div>
+                <div class="fornecedor-col">
+                    <label>Bairro:</label> {{fornecedor.endereco.bairro}}
+                </div>
+                <div class="fornecedor-col">
+                    <label>Cidade:</label> {{fornecedor.endereco.cidade}}
+                </div>
+                <div class="fornecedor-col">
+                    <label>Estado:</label> {{fornecedor.endereco.uf}}
+                </div>
+                <div class="fornecedor-col">
+                    <label>CEP:</label> {{fornecedor.endereco.cep}}
+                </div>
+                <div class="fornecedor-col">
+                    <button (click)="selecionarFornecedor(fornecedor)" class="btn btn-success">Selecionar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Inclua o Bootstrap JS e dependências -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>

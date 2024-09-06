@@ -1,24 +1,29 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Cliente } from '../modelo/Cliente';
 import { ClienteService } from '../servico/cliente.service';
-import { Endereco } from '../modelo/Endereco';
+import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-principal',
-  templateUrl: './principal.component.html',
-  styleUrls: ['./principal.component.css']
+  selector: 'app-cliente',
+  templateUrl: './cliente.component.html',
+  styleUrls: ['./cliente.component.css']
 })
-export class PrincipalComponent implements OnInit {
+export class ClienteComponent {
   cliente: Cliente = new Cliente(); // Inicializando o cliente com endereço
   btnCadastro: boolean = true;
   tabela: boolean = true;
   clientes: Cliente[] = [];
 
-  constructor(private servico: ClienteService) {}
+  constructor(private servico: ClienteService ,private router: Router) {}
+  
 
   ngOnInit(): void {
     this.selecionar();
   }
+  retornar() {
+    this.router.navigate(['inicio']);
+  }
+
 
   selecionar(): void {
     this.servico.selecionar()
@@ -41,7 +46,7 @@ export class PrincipalComponent implements OnInit {
   }
 
   selecionarCliente(cliente: Cliente): void {
-    this.cliente = { ...cliente }; // Preenche o formulário com os dados do cliente e endereço
+    this.cliente = { ...cliente }; // Preenche o formulário com os dados do cliente e endereçon
     this.btnCadastro = false; // Muda o estado para edição
     this.tabela = false; // Oculta a tabela
   }
@@ -98,3 +103,5 @@ export class PrincipalComponent implements OnInit {
     this.tabela = true;
   }
 }
+
+

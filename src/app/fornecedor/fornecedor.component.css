@@ -1,0 +1,4 @@
+.form-col img {
+    max-width: 200px; /* Define a largura máxima */
+    height: auto;     /* Mantém a proporção da imagem */
+}

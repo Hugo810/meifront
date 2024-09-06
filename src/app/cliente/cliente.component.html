@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulário e Tabela</title>
+    <!-- Inclua o Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .form-container {
+            margin-top: 30px;
+        }
+
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+        }
+
+        .form-col {
+            flex: 1 1 33%;
+            /* Ocupa 33% da largura por coluna */
+            padding: 5px;
+            box-sizing: border-box;
+        }
+
+        .form-col label {
+            font-weight: bold;
+            display: block;
+        }
+
+        .table-container {
+            margin-top: 30px;
+        }
+
+        .cliente-row {
+            display: flex;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #007bff;
+            border-radius: 5px;
+        }
+
+        .cliente-col {
+            flex: 1 1 33%;
+            /* Ocupa 33% da largura por coluna */
+            padding: 5px;
+            box-sizing: border-box;
+        }
+
+        .cliente-col label {
+            font-weight: bold;
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container mt-5">
+        <!-- Formulário de Coleta -->
+        <div class="form-container">
+            <form>
+                <div class="form-row">
+                    <div class="form-col text-center">
+                        <img src="assets/cliente.png" alt="Imagem de Cliente" class="img-fluid mb-3">
+                    </div>
+                </div>
+
+                <!-- Form Inputs -->
+                <div class="form-row">
+                    <div class="form-col">
+                        <label for="codigo">Código</label>
+                        <input type="number" id="codigo" class="form-control" name="codigo"
+                            [(ngModel)]="cliente.codigo">
+                    </div>
+                    <div class="form-col">
+                        <label for="nome">Nome</label>
+                        <input type="text" id="nome" class="form-control" name="nome" [(ngModel)]="cliente.nome">
+                    </div>
+                    <div class="form-col">
+                        <label for="sexo">Sexo</label>
+                        <input type="text" id="sexo" class="form-control" name="sexo" [(ngModel)]="cliente.sexo">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-col">
+                        <label for="cpf">CPF</label>
+                        <input type="text" id="cpf" class="form-control" name="cpf" [(ngModel)]="cliente.cpf">
+                    </div>
+                    <div class="form-col">
+                        <label for="cnpj">CNPJ</label>
+                        <input type="text" id="cnpj" class="form-control" name="cnpj" [(ngModel)]="cliente.cnpj">
+                    </div>
+                    <div class="form-col">
+                        <label for="telefoneResidencial">Telefone Residencial</label>
+                        <input type="text" id="telefoneResidencial" class="form-control" name="telefoneResidencial"
+                            [(ngModel)]="cliente.telefoneResidencial">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-col">
+                        <label for="telefoneComercial">Telefone Comercial</label>
+                        <input type="text" id="telefoneComercial" class="form-control" name="telefoneComercial"
+                            [(ngModel)]="cliente.telefoneComercial">
+                    </div>
+                    <div class="form-col">
+                        <label for="telefoneCelular">Telefone Celular</label>
+                        <input type="text" id="telefoneCelular" class="form-control" name="telefoneCelular"
+                            [(ngModel)]="cliente.telefoneCelular">
+                    </div>
+                    <div class="form-col">
+                        <label for="email">Email</label>
+                        <input type="text" id="email" class="form-control" name="email" [(ngModel)]="cliente.email">
+                    </div>
+                </div>
+
+                <!-- Endereço Inputs -->
+                <div class="form-row">
+                    <div class="form-col">
+                        <label for="logradouro">Logradouro</label>
+                        <input type="text" id="logradouro" class="form-control" name="logradouro"
+                            [(ngModel)]="cliente.endereco.logradouro">
+                    </div>
+                    <div class="form-col">
+                        <label for="numero">Número</label>
+                        <input type="text" id="numero" class="form-control" name="numero"
+                            [(ngModel)]="cliente.endereco.numero">
+                    </div>
+                    <div class="form-col">
+                        <label for="bairro">Bairro</label>
+                        <input type="text" id="bairro" class="form-control" name="bairro"
+                            [(ngModel)]="cliente.endereco.bairro">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-col">
+                        <label for="cidade">Cidade</label>
+                        <input type="text" id="cidade" class="form-control" name="cidade"
+                            [(ngModel)]="cliente.endereco.cidade">
+                    </div>
+                    <div class="form-col">
+                        <label for="estado">Estado</label>
+                        <input type="text" id="estado" class="form-control" name="estado"
+                            [(ngModel)]="cliente.endereco.uf">
+                    </div>
+                    <div class="form-col">
+                        <label for="cep">CEP</label>
+                        <input type="text" id="cep" class="form-control" name="cep" [(ngModel)]="cliente.endereco.cep">
+                    </div>
+                </div>
+
+                <!-- Buttons -->
+                <div class="form-row">
+                    <div class="form-col text-center">
+                        <input type="button" value="Cadastrar" *ngIf="btnCadastro" class="btn btn-primary"
+                            (click)="cadastrar()">
+                        <input type="button" value="Alterar" *ngIf="!btnCadastro" class="btn btn-warning"
+                            (click)="editar()">
+                        <input type="button" value="Remover" *ngIf="!btnCadastro" class="btn btn-danger"
+                            (click)="remover()">
+                        <input type="button" value="Cancelar" *ngIf="!btnCadastro" class="btn btn-secondary"
+                            (click)="cancelar()">
+                            <br><br>
+                        <div class="col-12 text-center">
+                            <button (click)="retornar()" class="btn btn-success">Voltar</button>
+                        </div>
+
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- Dados dos Clientes -->
+        <div class="table-container" *ngIf="clientes.length > 0">
+            <div *ngFor="let cliente of clientes" class="cliente-row">
+                <div class="cliente-col">
+                    <label>Código:</label> {{cliente.codigo}}
+                </div>
+                <div class="cliente-col">
+                    <label>Nome:</label> {{cliente.nome}}
+                </div>
+                <div class="cliente-col">
+                    <label>Sexo:</label> {{cliente.sexo}}
+                </div>
+                <div class="cliente-col">
+                    <label>CPF:</label> {{cliente.cpf}}
+                </div>
+                <div class="cliente-col">
+                    <label>CNPJ:</label> {{cliente.cnpj}}
+                </div>
+                <div class="cliente-col">
+                    <label>Telefone Residencial:</label> {{cliente.telefoneResidencial}}
+                </div>
+                <div class="cliente-col">
+                    <label>Telefone Comercial:</label> {{cliente.telefoneComercial}}
+                </div>
+                <div class="cliente-col">
+                    <label>Telefone Celular:</label> {{cliente.telefoneCelular}}
+                </div>
+                <div class="cliente-col">
+                    <label>Email:</label> {{cliente.email}}
+                </div>
+                <div class="cliente-col">
+                    <label>Logradouro:</label> {{cliente.endereco.logradouro}}
+                </div>
+                <div class="cliente-col">
+                    <label>Número:</label> {{cliente.endereco.numero}}
+                </div>
+                <div class="cliente-col">
+                    <label>Bairro:</label> {{cliente.endereco.bairro}}
+                </div>
+                <div class="cliente-col">
+                    <label>Cidade:</label> {{cliente.endereco.cidade}}
+                </div>
+                <div class="cliente-col">
+                    <label>Estado:</label> {{cliente.endereco.uf}}
+                </div>
+                <div class="cliente-col">
+                    <label>CEP:</label> {{cliente.endereco.cep}}
+                </div>
+                <div class="cliente-col">
+                    <button (click)="selecionarCliente(cliente)" class="btn btn-success">Selecionar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Inclua o Bootstrap JS e dependências -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>
