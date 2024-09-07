@@ -19,6 +19,7 @@ import { InicioComponent } from './inicio/inicio.component';
     BrowserModule,
     FormsModule,
     HttpClientModule,
+    
     AppRoutingModule
   ],
   providers: [],

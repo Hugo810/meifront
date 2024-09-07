@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Cliente } from '../modelo/Cliente';
@@ -18,9 +18,13 @@ export class ClienteService {
   }
 
   //Metodo para cadastrar clientes
-  cadastrar(obj:Cliente):Observable<Cliente>{
-    return this.http.post<Cliente>(this.url,obj)
+  cadastrar(cliente: Cliente): Observable<any> {
+    return this.http.post<any>(this.url, cliente, {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+      responseType: 'text' as 'json'
+    });
   }
+  
 
 
    //Metodo para editar clientes
