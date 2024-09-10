@@ -9,6 +9,14 @@ export class Fornecedor{
     telefone2:String  = "";
     nomeContato:String = "";
     email:String  = "";
-    endereco: Endereco = new Endereco();
-
-}
+    endereco: {
+        logradouro?: string;
+        numero?: string;
+        bairro?: string;
+        cidade?: string;
+        uf?: string;
+        cep?: string;
+      } = {};
+      mostrarDetalhes: boolean = false; // Adicionado para controlar a visibilidade dos detalhes
+      
+    }

@@ -31,4 +31,9 @@ export class FornecedorService {
       return this.http.delete<void>(this.url + '/'+id);
 
     }
+
+    // Método para buscar cliente por CNPJ
+  buscarPorCNPJ(cnpj: string): Observable<Fornecedor> {
+    return this.http.get<Fornecedor>(`${this.url}/cnpj/${cnpj}`);
+  }
 }

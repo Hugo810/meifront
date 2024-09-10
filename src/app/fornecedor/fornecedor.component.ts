@@ -17,6 +17,12 @@ export class FornecedorComponent {
 
   constructor(private servico: FornecedorService, private router :Router) {}
 
+  onKeyDown(event: KeyboardEvent): void {
+    if (event.key === 'Enter') {
+      this.buscarPorCNPJ();
+    }
+  }
+  
   retornar() {
     this.router.navigate(['inicio']);
   }
@@ -33,7 +39,31 @@ export class FornecedorComponent {
       });
   }
 
+  buscarPorCNPJ(): void {
+    const cnpj = this.fornecedor.cnpj?.replace(/[^\d]/g, ''); // Remove a máscara do CNPJ
+    if (cnpj && cnpj.length === 14) {
+      this.servico.buscarPorCNPJ(cnpj).subscribe(
+        fornecedor => {
+          if (fornecedor) {
+            this.fornecedor = fornecedor; // Preenche o formulário com os dados do fornecedor encontrado
+            alert('Fornecedor encontrado pelo CNPJ.');
+          } else {
+            alert('Nenhum fornecedor encontrado com este CNPJ.');
+          }
+        },
+        error => {
+          console.error('Erro ao buscar fornecedor por CNPJ:', error);
+          alert('Erro ao buscar fornecedor por CNPJ.');
+        }
+      );
+    } else {
+      alert('CNPJ inválido. Verifique e tente novamente.');
+    }
+  }
+  
+
   cadastrar(): void {
+    this.fornecedor.cnpj = this.fornecedor.cnpj.replace(/\D/g, ''); 
     this.servico.cadastrar(this.fornecedor)
       .subscribe(retorno => {
         this.fornecedores.push(retorno);
@@ -101,6 +131,48 @@ export class FornecedorComponent {
     this.fornecedor = new Fornecedor(); // Limpa o formulário, incluindo o endereço
     this.btnCadastro = true; // Volta ao estado de cadastro
     this.tabela = true;
+  }
+
+  aplicarMascaraCNPJ(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    let v = input.value;
+  
+    // Remove todos os caracteres não numéricos
+    v = v.replace(/\D/g, '');
+  
+    // Adiciona a máscara
+    if (v.length <= 14) {
+      // Adiciona a máscara ao CNPJ
+      v = v.replace(/^(\d{2})(\d{3})?(\d{3})?(\d{4})?$/, (match, p1, p2, p3, p4) => {
+        let result = `${p1}`;
+        if (p2) result += `.${p2}`;
+        if (p3) result += `.${p3}`;
+        if (p4) result += `/${p4}`;
+        if (v.length > 12) result += `-${v.slice(12, 14)}`; // Adiciona o hífen ao final
+        return result;
+      });
+    } else {
+      // Limita a 18 caracteres
+      v = v.slice(0, 14); // Mantém apenas os primeiros 14 dígitos
+      v = v.replace(/^(\d{2})(\d{3})?(\d{3})?(\d{4})?$/, (match, p1, p2, p3, p4) => {
+        let result = `${p1}`;
+        if (p2) result += `.${p2}`;
+        if (p3) result += `.${p3}`;
+        if (p4) result += `/${p4}`;
+        if (v.length > 12) result += `-${v.slice(12, 14)}`; // Adiciona o hífen ao final
+        return result;
+      });
+    }
+  
+    // Atualiza o valor do input com a máscara aplicada
+    input.value = v;
+  }
+  // Função para alternar a visibilidade dos detalhes
+  toggleDetalhes(fornecedor: Fornecedor): void {
+    fornecedor.mostrarDetalhes = !fornecedor.mostrarDetalhes;
+  }
+  toUpperCase(event: any) {
+    event.target.value = event.target.value.toUpperCase();
   }
 }
 

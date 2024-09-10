@@ -1,12 +1,11 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Formulário e Tabela</title>
     <!-- Inclua o Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Inclua o Font Awesome CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <style>
         .form-container {
             margin-top: 30px;
@@ -20,7 +19,6 @@
 
         .form-col {
             flex: 1 1 33%;
-            /* Ocupa 33% da largura por coluna */
             padding: 5px;
             box-sizing: border-box;
         }
@@ -45,7 +43,6 @@
 
         .cliente-col {
             flex: 1 1 33%;
-            /* Ocupa 33% da largura por coluna */
             padding: 5px;
             box-sizing: border-box;
         }
@@ -54,8 +51,49 @@
             font-weight: bold;
             display: block;
         }
+
+        .detalhes {
+            margin-top: 10px;
+            padding: 10px;
+            border-top: 1px solid #007bff;
+        }
+
+        .detalhes .detalhes-row {
+            display: flex;
+            flex-wrap: wrap;
+            margin-bottom: 10px;
+        }
+
+        .detalhes .detalhes-col {
+            flex: 1 1 50%;
+            padding: 5px;
+            box-sizing: border-box;
+        }
+
+        .detalhes .detalhes-col label {
+            font-weight: normal;
+            display: inline;
+        }
+
+        .btn-search {
+            background-color: #fd7e14;
+            /* Laranja Claro */
+            color: white;
+            border: none;
+        }
+
+        .btn-search:hover {
+            background-color: #e67e22;
+            /* Laranja mais escuro para hover */
+        }
+
+        .input-group-append .btn-search {
+            border-radius: 0;
+            /* Remove bordas arredondadas, se desejar */
+        }
     </style>
 </head>
+
 
 <body>
     <div class="container mt-5">
@@ -68,104 +106,101 @@
                     </div>
                 </div>
 
-                <!-- Form Inputs -->
+                <!-- Campo Código (único na linha) -->
+                <div class="form-row">
+                    <div class="form-row">
+                        <div class="form-col">
+                            <label for="codigo">Código</label>
+                            <input type="number" id="codigo" class="form-control codigo-input" name="codigo"
+                                [(ngModel)]="cliente.codigo" [readonly]="true">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Seletor de Tipo de Identificação (CPF/CNPJ) e campos de entrada -->
                 <div class="form-row">
                     <div class="form-col">
-                        <label for="codigo">Código</label>
-                        <input type="number" id="codigo" class="form-control" name="codigo"
-                            [(ngModel)]="cliente.codigo"  [readonly]="true">
+                        <label>
+                            <input type="radio" name="tipoIdentificacao" value="cpf" [(ngModel)]="tipoIdentificacao"
+                                (change)="onTipoIdentificacaoChange('cpf')" />
+                            CPF
+                        </label>
+                        <label>
+                            <input type="radio" name="tipoIdentificacao" value="cnpj" [(ngModel)]="tipoIdentificacao"
+                                (change)="onTipoIdentificacaoChange('cnpj')" />
+                            CNPJ
+                        </label>
                     </div>
+
+                    <div class="form-col" *ngIf="tipoIdentificacao === 'cpf'">
+                        <label for="cpf">CPF</label>
+                        <div class="input-group">
+                            <input type="text" id="cpf" class="form-control cpf-input" name="cpf"
+                                [(ngModel)]="cliente.cpf" (input)="aplicarMascaraCPF($event)"
+                                (keydown)="onKeyDown($event)" maxlength="14">
+                            <div class="input-group-append">
+                                <button class="btn btn-search" type="button" (click)="buscarPorCPF()">
+                                    <i class="fas fa-search"></i> Buscar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-col" *ngIf="tipoIdentificacao === 'cnpj'">
+                        <label for="cnpj">CNPJ</label>
+                        <div class="input-group">
+                            <input type="text" id="cnpj" class="form-control cnpj-input" name="cnpj"
+                                [(ngModel)]="cliente.cnpj" (input)="aplicarMascaraCNPJ($event)"
+                                (keydown)="onKeyDown($event)" maxlength="18">
+                            <div class="input-group-append">
+                                <button class="btn btn-search" type="button" (click)="buscarPorCNPJ()">
+                                    <i class="fas fa-search"></i> Buscar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- Restante do formulário -->
+                <div class="form-row">
                     <div class="form-col">
                         <label for="nome">Nome</label>
-                        <input type="text" id="nome" class="form-control" name="nome" [(ngModel)]="cliente.nome">
+                        <input type="text" id="nome" class="form-control uppercase-input" name="nome"
+                            [(ngModel)]="cliente.nome" (input)="toUpperCase($event)">
                     </div>
                     <div class="form-col">
                         <label for="sexo">Sexo</label>
-                        <input type="text" id="sexo" class="form-control" name="sexo" [(ngModel)]="cliente.sexo">
+                        <input type="text" id="sexo" class="form-control uppercase-input" name="sexo"
+                            [(ngModel)]="cliente.sexo" (input)="toUpperCase($event)">
                     </div>
                 </div>
 
                 <div class="form-row">
-                    <!-- Seletor de Tipo de Identificação -->
                     <div class="form-col">
-                      <label>
-                        <input 
-                          type="radio" 
-                          name="tipoIdentificacao" 
-                          value="cpf"
-                          [(ngModel)]="tipoIdentificacao"
-                          (change)="onTipoIdentificacaoChange('cpf')"
-                        />
-                        CPF
-                      </label>
-                      <label>
-                        <input 
-                          type="radio" 
-                          name="tipoIdentificacao" 
-                          value="cnpj"
-                          [(ngModel)]="tipoIdentificacao"
-                          (change)="onTipoIdentificacaoChange('cnpj')"
-                        />
-                        CNPJ
-                      </label>
+                        <label for="telefoneResidencial">Telefone Residencial</label>
+                        <input type="text" id="telefoneResidencial" class="form-control uppercase-input"
+                            name="telefoneResidencial" [(ngModel)]="cliente.telefoneResidencial"
+                            (input)="toUpperCase($event)">
                     </div>
-                  
-                    <!-- Campo CPF -->
-                    <div class="form-col" *ngIf="tipoIdentificacao === 'cpf'">
-                      <label for="cpf">CPF</label>
-                      <input 
-                        type="text" 
-                        id="cpf" 
-                        class="form-control cpf-input" 
-                        name="cpf" 
-                        [(ngModel)]="cliente.cpf"
-                        (input)="aplicarMascaraCPF($event)" maxlength="14"
-                      >
-                    </div>
-                  
-                    <!-- Campo CNPJ -->
-                    <div class="form-col" *ngIf="tipoIdentificacao === 'cnpj'">
-                      <label for="cnpj">CNPJ</label>
-                      <input 
-                        type="text" 
-                        id="cnpj" 
-                        class="form-control cnpj-input" 
-                        name="cnpj" 
-                        [(ngModel)]="cliente.cnpj"mask="00.000.000/0000-00"
-                        (input)="aplicarMascaraCNPJ($event)" maxlength="20"
-                      >
-                    </div>
-                    
-                    <!-- Outros campos do formulário -->
-                    <div class="form-col">
-                      <label for="telefoneResidencial">Telefone Residencial</label>
-                      <input 
-                        type="text" 
-                        id="telefoneResidencial" 
-                        class="form-control" 
-                        name="telefoneResidencial"
-                        [(ngModel)]="cliente.telefoneResidencial"
-                      >
-                    </div>
-                  </div>
-                  
-                
-                
+                </div>
 
                 <div class="form-row">
                     <div class="form-col">
                         <label for="telefoneComercial">Telefone Comercial</label>
-                        <input type="text" id="telefoneComercial" class="form-control" name="telefoneComercial"
-                            [(ngModel)]="cliente.telefoneComercial">
+                        <input type="text" id="telefoneComercial" class="form-control uppercase-input"
+                            name="telefoneComercial" [(ngModel)]="cliente.telefoneComercial"
+                            (input)="toUpperCase($event)">
                     </div>
                     <div class="form-col">
                         <label for="telefoneCelular">Telefone Celular</label>
-                        <input type="text" id="telefoneCelular" class="form-control" name="telefoneCelular"
-                            [(ngModel)]="cliente.telefoneCelular">
+                        <input type="text" id="telefoneCelular" class="form-control uppercase-input"
+                            name="telefoneCelular" [(ngModel)]="cliente.telefoneCelular" (input)="toUpperCase($event)">
                     </div>
                     <div class="form-col">
                         <label for="email">Email</label>
-                        <input type="text" id="email" class="form-control" name="email" [(ngModel)]="cliente.email">
+                        <input type="text" id="email" class="form-control uppercase-input" name="email"
+                            [(ngModel)]="cliente.email" (input)="toUpperCase($event)">
                     </div>
                 </div>
 
@@ -173,37 +208,39 @@
                 <div class="form-row">
                     <div class="form-col">
                         <label for="logradouro">Logradouro</label>
-                        <input type="text" id="logradouro" class="form-control" name="logradouro"
-                            [(ngModel)]="cliente.endereco.logradouro">
+                        <input type="text" id="logradouro" class="form-control uppercase-input" name="logradouro"
+                            [(ngModel)]="cliente.endereco.logradouro" (input)="toUpperCase($event)">
                     </div>
                     <div class="form-col">
                         <label for="numero">Número</label>
-                        <input type="text" id="numero" class="form-control" name="numero"
-                            [(ngModel)]="cliente.endereco.numero">
+                        <input type="text" id="numero" class="form-control uppercase-input" name="numero"
+                            [(ngModel)]="cliente.endereco.numero" (input)="toUpperCase($event)">
                     </div>
                     <div class="form-col">
                         <label for="bairro">Bairro</label>
-                        <input type="text" id="bairro" class="form-control" name="bairro"
-                            [(ngModel)]="cliente.endereco.bairro">
+                        <input type="text" id="bairro" class="form-control uppercase-input" name="bairro"
+                            [(ngModel)]="cliente.endereco.bairro" (input)="toUpperCase($event)">
                     </div>
                 </div>
 
                 <div class="form-row">
                     <div class="form-col">
                         <label for="cidade">Cidade</label>
-                        <input type="text" id="cidade" class="form-control" name="cidade"
-                            [(ngModel)]="cliente.endereco.cidade">
+                        <input type="text" id="cidade" class="form-control uppercase-input" name="cidade"
+                            [(ngModel)]="cliente.endereco.cidade" (input)="toUpperCase($event)">
                     </div>
                     <div class="form-col">
                         <label for="estado">Estado</label>
-                        <input type="text" id="estado" class="form-control" name="estado"
-                            [(ngModel)]="cliente.endereco.uf">
+                        <input type="text" id="estado" class="form-control uppercase-input" name="estado"
+                            [(ngModel)]="cliente.endereco.uf" (input)="toUpperCase($event)">
                     </div>
                     <div class="form-col">
                         <label for="cep">CEP</label>
-                        <input type="text" id="cep" class="form-control" name="cep" [(ngModel)]="cliente.endereco.cep">
+                        <input type="text" id="cep" class="form-control uppercase-input" name="cep"
+                            [(ngModel)]="cliente.endereco.cep" (input)="toUpperCase($event)">
                     </div>
                 </div>
+
 
                 <!-- Buttons -->
                 <div class="form-row">
@@ -216,11 +253,10 @@
                             (click)="remover()">
                         <input type="button" value="Cancelar" *ngIf="!btnCadastro" class="btn btn-secondary"
                             (click)="cancelar()">
-                            <br><br>
+                        <br><br>
                         <div class="col-12 text-center">
                             <button (click)="retornar()" class="btn btn-success">Voltar</button>
                         </div>
-
                     </div>
                 </div>
             </form>
@@ -230,55 +266,76 @@
         <div class="table-container" *ngIf="clientes.length > 0">
             <div *ngFor="let cliente of clientes" class="cliente-row">
                 <div class="cliente-col">
-                    <label>Código:</label> {{cliente.codigo}}
+                    <label>Código:</label> {{ cliente.codigo }}
                 </div>
                 <div class="cliente-col">
-                    <label>Nome:</label> {{cliente.nome}}
+                    <label>Nome:</label> {{ cliente.nome }}
                 </div>
-                <div class="cliente-col">
-                    <label>Sexo:</label> {{cliente.sexo}}
+                <div class="cliente-col text-center">
+                    <button (click)="toggleDetalhes(cliente)" class="btn btn-primary">
+                        {{ cliente.mostrarDetalhes ? 'Ocultar Detalhes' : 'Mostrar Detalhes' }}
+                    </button>
+                    <button (click)="selecionarCliente(cliente)" class="btn btn-secondary ml-2">Selecionar</button>
                 </div>
-                <div class="cliente-col">
-                    <label>CPF:</label> {{cliente.cpf}}
-                </div>
-                <div class="cliente-col">
-                    <label>CNPJ:</label> {{cliente.cnpj}}
-                </div>
-                <div class="cliente-col">
-                    <label>Telefone Residencial:</label> {{cliente.telefoneResidencial}}
-                </div>
-                <div class="cliente-col">
-                    <label>Telefone Comercial:</label> {{cliente.telefoneComercial}}
-                </div>
-                <div class="cliente-col">
-                    <label>Telefone Celular:</label> {{cliente.telefoneCelular}}
-                </div>
-                <div class="cliente-col">
-                    <label>Email:</label> {{cliente.email}}
-                </div>
-                <div class="cliente-col">
-                    <label>Logradouro:</label> {{cliente.endereco.logradouro}}
-                </div>
-                <div class="cliente-col">
-                    <label>Número:</label> {{cliente.endereco.numero}}
-                </div>
-                <div class="cliente-col">
-                    <label>Bairro:</label> {{cliente.endereco.bairro}}
-                </div>
-                <div class="cliente-col">
-                    <label>Cidade:</label> {{cliente.endereco.cidade}}
-                </div>
-                <div class="cliente-col">
-                    <label>Estado:</label> {{cliente.endereco.uf}}
-                </div>
-                <div class="cliente-col">
-                    <label>CEP:</label> {{cliente.endereco.cep}}
-                </div>
-                <div class="cliente-col">
-                    <button (click)="selecionarCliente(cliente)" class="btn btn-success">Selecionar</button>
+                <!-- Detalhes do cliente -->
+                <div class="detalhes" *ngIf="cliente.mostrarDetalhes">
+                    <div class="detalhes-row">
+                        <div class="detalhes-col">
+                            <label>Sexo:</label> {{ cliente.sexo }}
+                        </div>
+                        <div class="detalhes-col">
+                            <label>CPF:</label> {{ cliente.cpf }}
+                        </div>
+                    </div>
+                    <div class="detalhes-row">
+                        <div class="detalhes-col">
+                            <label>CNPJ:</label> {{ cliente.cnpj }}
+                        </div>
+                        <div class="detalhes-col">
+                            <label>Telefone Residencial:</label> {{ cliente.telefoneResidencial }}
+                        </div>
+                    </div>
+                    <div class="detalhes-row">
+                        <div class="detalhes-col">
+                            <label>Telefone Comercial:</label> {{ cliente.telefoneComercial }}
+                        </div>
+                        <div class="detalhes-col">
+                            <label>Telefone Celular:</label> {{ cliente.telefoneCelular }}
+                        </div>
+                    </div>
+                    <div class="detalhes-row">
+                        <div class="detalhes-col">
+                            <label>Email:</label> {{ cliente.email }}
+                        </div>
+                        <div class="detalhes-col">
+                            <label>Logradouro:</label> {{ cliente.endereco.logradouro }}
+                        </div>
+                    </div>
+                    <div class="detalhes-row">
+                        <div class="detalhes-col">
+                            <label>Número:</label> {{ cliente.endereco.numero }}
+                        </div>
+                        <div class="detalhes-col">
+                            <label>Bairro:</label> {{ cliente.endereco.bairro }}
+                        </div>
+                    </div>
+                    <div class="detalhes-row">
+                        <div class="detalhes-col">
+                            <label>Cidade:</label> {{ cliente.endereco.cidade }}
+                        </div>
+                        <div class="detalhes-col">
+                            <label>Estado:</label> {{ cliente.endereco.uf }}
+                        </div>
+                    </div>
+                    <div class="detalhes-row">
+                        <div class="detalhes-col">
+                            <label>CEP:</label> {{ cliente.endereco.cep }}
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
+
     </div>
 
     <!-- Inclua o Bootstrap JS e dependências -->
@@ -286,5 +343,3 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
-
-</html>

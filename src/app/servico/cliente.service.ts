@@ -24,6 +24,15 @@ export class ClienteService {
       responseType: 'text' as 'json'
     });
   }
+  // Método para buscar cliente por CPF
+  buscarPorCPF(cpf: string): Observable<Cliente> {
+    return this.http.get<Cliente>(`${this.url}/cpf/${cpf}`);
+  }
+
+  // Método para buscar cliente por CNPJ
+  buscarPorCNPJ(cnpj: string): Observable<Cliente> {
+    return this.http.get<Cliente>(`${this.url}/cnpj/${cnpj}`);
+  }
   
 
 
@@ -35,4 +44,6 @@ export class ClienteService {
       return this.http.delete<void>(this.url + '/'+id);
 
     }
+    
+
 }

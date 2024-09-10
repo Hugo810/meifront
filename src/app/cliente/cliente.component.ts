@@ -21,6 +21,65 @@ export class ClienteComponent {
     this.selecionar();
   }
 
+  // Função chamada ao pressionar qualquer tecla
+  onKeyDown(event: KeyboardEvent): void {
+    if (event.key === 'Enter') {
+      if (this.tipoIdentificacao === 'cpf') {
+        this.buscarPorCPF();
+      } else if (this.tipoIdentificacao === 'cnpj') {
+        this.buscarPorCNPJ();
+      }
+    }
+  }
+  
+    // Função para buscar cliente por CPF
+    buscarPorCPF(): void {
+      const cpf = this.cliente.cpf?.replace(/[^\d]/g, ''); // Remove a máscara do CPF
+      if (cpf && cpf.length === 11) {
+        this.servico.buscarPorCPF(cpf).subscribe(
+          cliente => {
+            if (cliente) {
+              this.cliente = cliente; // Preenche o formulário com os dados do cliente encontrado
+              alert('Cliente encontrado pelo CPF.');
+            } else {
+              alert('Nenhum cliente encontrado com este CPF.');
+            }
+          },
+          error => {
+            console.error('Erro ao buscar cliente por CPF:', error);
+            alert('Erro ao buscar cliente por CPF.');
+          }
+        );
+      } else {
+        alert('CPF inválido. Verifique e tente novamente.');
+      }
+    }
+  
+    // Função para buscar cliente por CNPJ
+    buscarPorCNPJ(): void {
+      const cnpj = this.cliente.cnpj?.replace(/[^\d]/g, ''); // Remove a máscara do CNPJ
+      if (cnpj && cnpj.length === 14) {
+        this.servico.buscarPorCNPJ(cnpj).subscribe(
+          cliente => {
+            if (cliente) {
+              this.cliente = cliente; // Preenche o formulário com os dados do cliente encontrado
+              alert('Cliente encontrado pelo CNPJ.');
+            } else {
+              alert('Nenhum cliente encontrado com este CNPJ.');
+            }
+          },
+          error => {
+            console.error('Erro ao buscar cliente por CNPJ:', error);
+            alert('Erro ao buscar cliente por CNPJ.');
+          }
+        );
+      } else {
+        alert('CNPJ inválido. Verifique e tente novamente.');
+      }
+    }
+
+  
+
   retornar() {
     this.router.navigate(['inicio']);
   }
@@ -34,18 +93,33 @@ export class ClienteComponent {
   }
 
   cadastrar(): void {
-    if (this.tipoIdentificacao === 'cpf' && !this.isValidCPF(this.cliente.cpf)) {
-      alert('O CPF informado é inválido.');
-      return;
+    if (this.cliente.cpf) {
+      this.cliente.cpf = this.cliente.cpf.replace(/[^\d]/g, ''); // Remove pontos e traços do CPF
     }
 
-    if (this.tipoIdentificacao === 'cnpj' && !this.isValidCNPJ(this.cliente.cnpj)) {
-      alert('O CNPJ informado é inválido.');
-      return;
+    if (this.cliente.cnpj) {
+      this.cliente.cnpj = this.cliente.cnpj.replace(/[^\d]/g, ''); // Remove pontos, traços e barras do CNPJ
     }
 
+    // Verifique se tipoIdentificacao é definido
+    if (this.tipoIdentificacao === 'cpf') {
+      // Verifique se cpf está definido e é válido
+      if (this.cliente.cpf && !this.isValidCPF(this.cliente.cpf)) {
+        alert('O CPF informado é inválido.');
+        return;
+      }
+    }
+  
+    if (this.tipoIdentificacao === 'cnpj') {
+      // Verifique se cnpj está definido e é válido
+      if (this.cliente.cnpj && !this.isValidCNPJ(this.cliente.cnpj)) {
+        alert('O CNPJ informado é inválido.');
+        return;
+      }
+    }
+  
     console.log('Cliente a ser cadastrado:', this.cliente); // Verifique a estrutura dos dados enviados
-
+    
     this.servico.cadastrar(this.cliente)
       .subscribe(
         retorno => {
@@ -63,16 +137,19 @@ export class ClienteComponent {
         }
       );
   }
-
+  
+  // Método para validar CPF (exemplo básico, ajuste conforme necessário)
   isValidCPF(cpf: string): boolean {
     // Adicione a lógica de validação do CPF aqui
     return true; // Retorne true se válido e false se inválido
   }
-
+  
+  // Método para validar CNPJ (exemplo básico, ajuste conforme necessário)
   isValidCNPJ(cnpj: string): boolean {
     // Adicione a lógica de validação do CNPJ aqui
     return true; // Retorne true se válido e false se inválido
   }
+  
 
   selecionarCliente(cliente: Cliente): void {
     this.cliente = { ...cliente }; // Preenche o formulário com os dados do cliente e endereçon
@@ -196,5 +273,12 @@ export class ClienteComponent {
     } else if (tipo === 'cnpj') {
       this.cliente.cpf = '';
     }
+  }
+  // Função para alternar a visibilidade dos detalhes
+  toggleDetalhes(cliente: Cliente): void {
+    cliente.mostrarDetalhes = !cliente.mostrarDetalhes;
+  }
+  toUpperCase(event: any) {
+    event.target.value = event.target.value.toUpperCase();
   }
 }
